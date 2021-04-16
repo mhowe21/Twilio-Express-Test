@@ -1,0 +1,26 @@
+{
+  "name": "twilioexpresstest",
+  "version": "1.0.0",
+  "description": "A quick test of using the messaging platform in twillio in node js. ",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "devStart": "nodemon server.js"
+  },
+  "author": "Mason Howe",
+  "license": "ISC",
+  "dependencies": {
+    "body-parse": "^0.1.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.1",
+    "express-handlebars": "^5.2.1",
+    "mongoose": "^5.12.2",
+    "path": "^0.12.7",
+    "twilio": "^3.58.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
