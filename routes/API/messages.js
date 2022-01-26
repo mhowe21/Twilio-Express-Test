@@ -21,7 +21,7 @@ router.post("/sms", async (req, res) => {
       from: servNumber,
       to: getDestination(req.body.to),
       statusCallback:
-        "http://Alfred.mhowetesting.com:4570/api/v1/messages/status/hook",
+        "http://mhowetesting.com:4570/api/v1/messages/status/hook",
     })
     .then((message) => {
       console.log(message);
@@ -61,14 +61,15 @@ router.post("/sms", async (req, res) => {
 });
 
 router.post("/mms", async (req, res) => {
+  let text = req.body.body ? req.body.body : "";
   twilio.messages
     .create({
-      body: req.body.body,
-      from: tNumber,
+      body: text,
+      from: servNumber,
       mediaUrl: [`${req.body.url}`],
       to: req.body.to,
       statusCallback:
-        "http://Alfred.mhowetesting.com:4570/api/v1/messages/status/hook",
+        "http://mhowetesting.com:4570/api/v1/messages/status/hook",
     })
     .then((data) => {
       console.log(message);
@@ -76,10 +77,10 @@ router.post("/mms", async (req, res) => {
     });
 });
 
-router.get("/recieved", (req, res) => {
-  res.status(200).json(msg);
-  console.log(msg);
-});
+// router.get("/recieved", (req, res) => {
+//   res.status(200).json(msg);
+//   console.log(msg);
+// });
 
 router.post("/message_service", (req, res) => {
   twilio.messages
@@ -106,9 +107,8 @@ router.get("/number/lookup", async (req, res) => {
 
 // webhooks
 router.post("/return/hook", async ({ params, body }, res, next) => {
-  console.log(body);
-  //msg.push(req.body);
-  res.status(200).json("Message Recieved");
+  //console.log(`Recieved Message:${body.Body}`);
+  res.status(200).send("message received");
 });
 
 router.post("/status/hook", ({ body }, res) => {

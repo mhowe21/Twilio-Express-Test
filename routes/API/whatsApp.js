@@ -9,19 +9,36 @@ router.post("/message", (req, res) => {
   //res.json("congrats you found the whatsApp endpoint");
   let mediaPreset = req.body.url;
 
-  twilio.messages
-    .create({
-      from: `whatsapp:${wNumber}`,
-      body: req.body.body,
-      statusCallback:
-        "http://Alfred.mhowetesting.com:4570/api/v1/whatsapp/hook/status",
-      ...(mediaPreset && { mediaUrl: [`${req.body.url}`] }),
-      to: `whatsapp:+${req.body.to}`,
-    })
-    .then((data) => {
-      console.log(data);
-      res.json(data);
-    });
+  if (mediaPreset) {
+    twilio.messages
+      .create({
+        from: `whatsapp:${wNumber}`,
+        body: req.body.body,
+        statusCallback:
+          "http://mhowetesting.com:4570/api/v1/whatsapp/hook/status",
+        ...(mediaPreset && { mediaUrl: [`${req.body.url}`] }),
+        to: `whatsapp:+${req.body.to}`,
+        mediaUrl: [mediaPreset],
+      })
+      .then((data) => {
+        console.log(data);
+        res.json(data);
+      });
+  } else {
+    twilio.messages
+      .create({
+        from: `whatsapp:${wNumber}`,
+        body: req.body.body,
+        statusCallback:
+          "http://mhowetesting.com:4570/api/v1/whatsapp/hook/status",
+        ...(mediaPreset && { mediaUrl: [`${req.body.url}`] }),
+        to: `whatsapp:+${req.body.to}`,
+      })
+      .then((data) => {
+        console.log(data);
+        res.json(data);
+      });
+  }
 });
 
 router.post("/hook/recieved", (req, res) => {
