@@ -108,6 +108,7 @@ router.get("/number/lookup", async (req, res) => {
 // webhooks
 router.post("/return/hook", async ({ params, body }, res, next) => {
   //console.log(`Recieved Message:${body.Body}`);
+  console.log(body);
   res.status(200).send("message received");
 });
 
