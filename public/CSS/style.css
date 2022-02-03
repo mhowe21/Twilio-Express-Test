@@ -5,3 +5,7 @@
 .hidden {
   display: none;
 }
+
+#response-box {
+  width: 100%;
+}
