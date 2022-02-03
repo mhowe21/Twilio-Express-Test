@@ -20,7 +20,7 @@ router.post("/sms", async (req, res) => {
     .create({
       body: text,
       from: servNumber,
-      to: getDestination(req.body.to),
+      to: `+${getDestination(req.body.to)}`,
       statusCallback:
         "http://mhowetesting.com:4570/api/v1/messages/status/hook",
     })
@@ -68,7 +68,7 @@ router.post("/mms", async (req, res) => {
       body: text,
       from: servNumber,
       mediaUrl: [`${req.body.url}`],
-      to: req.body.to,
+      to: `+${req.body.to}`,
       statusCallback:
         "http://mhowetesting.com:4570/api/v1/messages/status/hook",
     })

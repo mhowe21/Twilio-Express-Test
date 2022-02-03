@@ -120,8 +120,6 @@ function sendWhatsApp(number, message, mediaURL) {
     });
 }
 
-// responseBox.value = setInterval(() => getReplies(), 1000);
-
 setInterval(() => {
   var requestOptions = {
     method: "GET",

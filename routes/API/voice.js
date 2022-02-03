@@ -5,15 +5,14 @@ const VoiceResponse = require("../../Utils/voiceresponse");
 const tNumber = process.env.T_NUMBER;
 
 router.post("/call_status", (req, res) => {
+  console.log(req.body);
   res.status(200).json("Call status received");
-  console.log(res);
 });
 
 router.post("/outbound_call/:number", ({ params, body }, res) => {
   twilio.calls
     .create({
-      twiml:
-        "<Response><Say>Hello! This is a test call from Mason's Sandbox. Please disregard this message.</Say></Response>",
+      twiml: `<Response><Say>${body.Body}</Say></Response>`,
       to: `+${params.number}`,
       from: tNumber,
     })
