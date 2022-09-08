@@ -68,8 +68,11 @@ function sendMMS(number, message, mediaURL) {
   let headers = new Headers();
   headers.append("Content-Type", "application/json");
 
+  let mmsMessage = message ? message : "";
+  console.log(mmsMessage);
+
   let raw = JSON.stringify({
-    body: message,
+    body: mmsMessage,
     to: number,
     url: mediaURL,
   });
@@ -120,15 +123,15 @@ function sendWhatsApp(number, message, mediaURL) {
     });
 }
 
-setInterval(() => {
-  var requestOptions = {
-    method: "GET",
-  };
+// setInterval(() => {
+//   var requestOptions = {
+//     method: "GET",
+//   };
 
-  fetch("http://mhowetesting.com:4570/api/v1/messages/replies", requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-      responseBox.value = JSON.stringify(result);
-    })
-    .catch((error) => console.log("error", error));
-}, 1000);
+//   fetch("http://mhowetesting.com:4570/api/v1/messages/replies", requestOptions)
+//     .then((response) => response.json())
+//     .then((result) => {
+//       responseBox.value = JSON.stringify(result);
+//     })
+//     .catch((error) => console.log("error", error));
+// }, 1000);

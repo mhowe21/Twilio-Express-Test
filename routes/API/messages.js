@@ -137,11 +137,12 @@ router.get("/replies", async (req, res) => {
 });
 
 // webhooks
-router.post("/return/hook", async ({ params, body }, res, next) => {
+router.post("/return/hook/", async ({ params, body }, res, next) => {
   //console.log(`Recieved Message:${body.Body}`);
+  //console.log(`id is ${params.id}`);
   console.log(body);
   replies.push({ from: body.From, Message: body.Body });
-  res.status(200).send("message received");
+  res.status(200).end();
   console.log(replies);
 });
 
