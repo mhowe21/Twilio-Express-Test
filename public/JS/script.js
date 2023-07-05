@@ -3,6 +3,7 @@ const mmsMedia = document.querySelector(".MMS-media");
 const MMSOption = document.querySelector("#MMS-Radio");
 const SMSOption = document.querySelector("#SMS-Radio");
 const whatsAppOption = document.querySelector("#WhatsApp-Radio");
+const responseBox = document.querySelector("#response-box");
 
 //actions
 sendButton.addEventListener("click", (e) => {
@@ -67,8 +68,11 @@ function sendMMS(number, message, mediaURL) {
   let headers = new Headers();
   headers.append("Content-Type", "application/json");
 
+  let mmsMessage = message ? message : "";
+  console.log(mmsMessage);
+
   let raw = JSON.stringify({
-    body: message,
+    body: mmsMessage,
     to: number,
     url: mediaURL,
   });
@@ -91,7 +95,7 @@ function sendMMS(number, message, mediaURL) {
     });
 }
 
-function sendWhatsApp(number, message, mediaURL) {
+function sendWhatsApp(number, message, mediaURL = "") {
   let headers = new Headers();
   headers.append("Content-Type", "application/json");
 
@@ -118,3 +122,16 @@ function sendWhatsApp(number, message, mediaURL) {
       console.log(err);
     });
 }
+
+// setInterval(() => {
+//   var requestOptions = {
+//     method: "GET",
+//   };
+
+//   fetch("http://mhowetesting.com:4570/api/v1/messages/replies", requestOptions)
+//     .then((response) => response.json())
+//     .then((result) => {
+//       responseBox.value = JSON.stringify(result);
+//     })
+//     .catch((error) => console.log("error", error));
+// }, 1000);

@@ -6,6 +6,7 @@ require("dotenv").config("../../.env");
 const tNumber = process.env.T_NUMBER;
 const servNumber = process.env.MES_SERV;
 const failOverNumber = process.env.FAIL_OVER_NUMBER;
+let replies = [];
 
 router.post("/sms", async (req, res) => {
   let text = req.body.body;
@@ -19,7 +20,7 @@ router.post("/sms", async (req, res) => {
     .create({
       body: text,
       from: servNumber,
-      to: getDestination(req.body.to),
+      to: `${getDestination(req.body.to)}`,
       statusCallback:
         "http://mhowetesting.com:4570/api/v1/messages/status/hook",
     })
@@ -67,11 +68,37 @@ router.post("/mms", async (req, res) => {
       body: text,
       from: servNumber,
       mediaUrl: [`${req.body.url}`],
-      to: req.body.to,
+      to: `+${req.body.to}`,
       statusCallback:
         "http://mhowetesting.com:4570/api/v1/messages/status/hook",
     })
     .then((data) => {
+      db.Sent.create({
+        body: message.body,
+        numSegments: message.numSegments,
+        direction: message.direction,
+        from: message.from,
+        to: message.to,
+        price: message.price,
+        uri: message.uri,
+        errorMessage: message.errorMessage,
+        accountSid: message.accountSid,
+        numMedia: message.numSegments,
+        messagingServiceSid: message.messagingServiceSid,
+        sid: message.sid,
+        dateCreated: message.dateCreated,
+        errorCode: message.errorCode,
+        priceUnit: message.priceUnit,
+        apiVersion: message.apiVersion,
+        subresourcesUris: message.subresourceUris,
+        $push: { status: message.status },
+      })
+        .then((dbData) => {
+          console.log(dbData);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       console.log(message);
       res.json(data);
     });
@@ -105,11 +132,18 @@ router.get("/number/lookup", async (req, res) => {
     });
 });
 
+router.get("/replies", async (req, res) => {
+  res.status(200).send(replies);
+});
+
 // webhooks
-router.post("/return/hook", async ({ params, body }, res, next) => {
+router.post("/return/hook/", async ({ params, body }, res, next) => {
   //console.log(`Recieved Message:${body.Body}`);
+  //console.log(`id is ${params.id}`);
   console.log(body);
-  res.status(200).send("message received");
+  replies.push({ from: body.From, Message: body.Body });
+  res.status(200).end();
+  console.log(replies);
 });
 
 router.post("/status/hook", ({ body }, res) => {
