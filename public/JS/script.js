@@ -95,7 +95,7 @@ function sendMMS(number, message, mediaURL) {
     });
 }
 
-function sendWhatsApp(number, message, mediaURL) {
+function sendWhatsApp(number, message, mediaURL = "") {
   let headers = new Headers();
   headers.append("Content-Type", "application/json");
 
