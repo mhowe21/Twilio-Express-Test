@@ -5,6 +5,7 @@ const db = require("../../models");
 require("dotenv").config("../../.env");
 const tNumber = process.env.T_NUMBER;
 const servNumber = process.env.MES_SERV;
+
 const failOverNumber = process.env.FAIL_OVER_NUMBER;
 let replies = [];
 
@@ -22,7 +23,7 @@ router.post("/sms", async (req, res) => {
       from: servNumber,
       to: `${getDestination(req.body.to)}`,
       statusCallback:
-        "http://mhowetesting.com:4570/api/v1/messages/status/hook",
+        "http://mhowetesting.com:4570/api/v1/messaging/hook/status",
     })
     .then((message) => {
       console.log(message);
