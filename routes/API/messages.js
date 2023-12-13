@@ -120,6 +120,10 @@ router.post("/message_service", (req, res) => {
     .then((data) => {
       console.log(data);
       res.status(201).json(data);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400);
     });
 });
 
@@ -149,7 +153,7 @@ router.post("/return/hook/", async ({ params, body }, res, next) => {
 
 router.post("/status/hook", ({ body }, res) => {
   console.log(body);
-  res.status(200).json("status recieved");
+  res.status(200).end();
 });
 
 router.post;

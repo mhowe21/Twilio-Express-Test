@@ -20,19 +20,23 @@ router.post("/message", (req, res) => {
     .then((data) => {
       console.log(data);
       res.json(data);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.json(err);
     });
 });
 
 router.post("/hook/recieved", (req, res) => {
   let body = req.body;
   console.log(body);
-  res.status(200).json("message received");
+  res.status(200).end();
 });
 
 router.post("/hook/status", (req, res) => {
   let body = req.body;
   console.log(body);
-  res.status(200).json("status received");
+  res.status(200).end();
 });
 
 module.exports = router;
