@@ -11,7 +11,7 @@ router.post("/message", (req, res) => {
       from: `whatsapp:${wNumber}`,
       body: req.body.body,
       statusCallback:
-        "http://mhowetesting.com:4570/api/v1/whatsapp/hook/status",
+        "https://webhook.site/664e0882-73b3-4c9f-b134-0f5c98a1db74",
       to: `whatsapp:+${req.body.to}`,
       ...(req.body.url && { mediaUrl: [`${req.body.url}`] }),
 

@@ -5,6 +5,7 @@ const db = require("../../models");
 require("dotenv").config("../../.env");
 const tNumber = process.env.T_NUMBER;
 const servNumber = process.env.MES_SERV;
+const statusCallbackWebhook = process.env.STATUS_CALLBACK_URL;
 
 const failOverNumber = process.env.FAIL_OVER_NUMBER;
 let replies = [];
@@ -22,12 +23,12 @@ router.post("/sms", async (req, res) => {
       body: text,
       from: servNumber,
       to: `${getDestination(req.body.to)}`,
-      statusCallback:
-        "http://mhowetesting.com:4570/api/v1/messaging/hook/status",
+      statusCallback: statusCallbackWebhook,
     })
     .then((message) => {
       console.log(message);
       //console.log(message.sid);
+
       db.Sent.create({
         body: message.body,
         numSegments: message.numSegments,
@@ -58,6 +59,7 @@ router.post("/sms", async (req, res) => {
       res.json(message);
     })
     .catch((err) => {
+      console.log("we hit a message error");
       console.log(err);
     });
 });
@@ -68,12 +70,11 @@ router.post("/mms", async (req, res) => {
     .create({
       body: text,
       from: servNumber,
-      mediaUrl: [`${req.body.url}`],
       to: `+${req.body.to}`,
-      statusCallback:
-        "http://mhowetesting.com:4570/api/v1/messages/status/hook",
+      statusCallback: statusCallbackWebhook,
+      ...(req.body.url && { mediaUrl: [`${req.body.url}`] }),
     })
-    .then((data) => {
+    .then((message) => {
       db.Sent.create({
         body: message.body,
         numSegments: message.numSegments,
@@ -101,7 +102,7 @@ router.post("/mms", async (req, res) => {
           console.log(err);
         });
       console.log(message);
-      res.json(data);
+      res.json(message);
     });
 });
 
