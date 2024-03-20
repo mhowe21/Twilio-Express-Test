@@ -4,14 +4,14 @@ const client = require("../../Utils/Twilio");
 const twilio = require("../../Utils/Twilio");
 require("dotenv").config("../../.env");
 const wNumber = process.env.WA_NUMBER;
+const statusCallbackWebhook = process.env.STATUS_CALLBACK_URL;
 
 router.post("/message", (req, res) => {
   twilio.messages
     .create({
       from: `whatsapp:${wNumber}`,
       body: req.body.body,
-      statusCallback:
-        "https://webhook.site/664e0882-73b3-4c9f-b134-0f5c98a1db74",
+      statusCallback: statusCallbackWebhook,
       to: `whatsapp:+${req.body.to}`,
       ...(req.body.url && { mediaUrl: [`${req.body.url}`] }),
 

@@ -7,25 +7,29 @@ const responseBox = document.querySelector("#response-box");
 
 //actions
 sendButton.addEventListener("click", (e) => {
-  //e.preventDefault();
   let toNumber = document.getElementById("input-number").value.trim();
   let message = document.getElementById("input-text").value;
   let radio = document.querySelector("input[type='radio']:checked").value;
 
   if (radio == "SMS") {
     sendSMS(toNumber, message);
+    e.preventDefault(); // prevents the form from resetting on submit
   } else if (radio == "MMS") {
     let mediaURL = document.querySelector("#input-media-URL").value;
     if (mediaURL && toNumber && message) {
       sendMMS(toNumber, message, mediaURL);
+      e.preventDefault();
     } else if (toNumber && message) {
       sendSMS(toNumber, message);
+      e.preventDefault();
+      // sends as SMS if MMS is selected but no media is given.
     }
   } else if (radio == "whatsapp") {
     let mediaURL = document.querySelector("#input-media-URL").value;
     sendWhatsApp(toNumber, message, mediaURL);
+    e.preventDefault();
   }
-  alert("sent");
+  //alert("Request sent");
 });
 
 MMSOption.addEventListener("click", (e) => {
@@ -59,9 +63,12 @@ function sendSMS(number, message) {
   };
 
   fetch("/api/v1/messages/sms", requestOptions)
-    .then((response) => response.json())
-    .then((result) => console.log(result))
-    .catch((error) => console.log("error", error));
+    .then((data) => {
+      console.log(data.json());
+    })
+    .catch((error) => {
+      console.log("an error occured " + error);
+    });
 }
 
 function sendMMS(number, message, mediaURL) {
@@ -84,11 +91,8 @@ function sendMMS(number, message, mediaURL) {
   };
 
   fetch("/api/v1/messages/mms", requestOptions)
-    .then((response) => {
-      return response.json();
-    })
     .then((data) => {
-      console.log(data);
+      console.log(data.json());
     })
     .catch((err) => {
       console.log(err);
@@ -112,11 +116,10 @@ function sendWhatsApp(number, message, mediaURL = "") {
   };
 
   fetch("/api/v1/whatsapp/message", requestOptions)
-    .then((response) => {
-      response.json();
-    })
-    .then((result) => {
-      console.log(result);
+    .then((response) => response.json())
+    .then((responseJSON) => {
+      console.log(responseJSON);
+      responseBox.value = JSON.stringify(responseJSON);
     })
     .catch((err) => {
       console.log(err);
