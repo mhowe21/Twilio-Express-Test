@@ -29,11 +29,10 @@ sendButton.addEventListener("click", (e) => {
     sendWhatsApp(toNumber, message, mediaURL);
     e.preventDefault();
   }
-  //alert("Request sent");
+  alert("Request sent");
 });
 
 MMSOption.addEventListener("click", (e) => {
-  console.log("mms selected");
   mmsMedia.classList.remove("hidden");
 });
 
@@ -63,8 +62,10 @@ function sendSMS(number, message) {
   };
 
   fetch("/api/v1/messages/sms", requestOptions)
-    .then((data) => {
-      console.log(data.json());
+    .then((response) => response.json())
+    .then((responseJSON) => {
+      console.log(responseJSON);
+      responseBox.value = JSON.stringify(responseJSON);
     })
     .catch((error) => {
       console.log("an error occured " + error);
@@ -91,8 +92,10 @@ function sendMMS(number, message, mediaURL) {
   };
 
   fetch("/api/v1/messages/mms", requestOptions)
-    .then((data) => {
-      console.log(data.json());
+    .then((response) => response.json())
+    .then((responseJSON) => {
+      console.log(responseJSON);
+      responseBox.value(JSON.stringify(responseJSON));
     })
     .catch((err) => {
       console.log(err);
