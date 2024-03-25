@@ -3,8 +3,15 @@ const exphbs = require("express-handlebars");
 const path = require("path");
 const mongoose = require("mongoose");
 const app = express();
+const fs = require("fs");
+const https = require("https");
 
 const PORT = process.env.PORT || 4570;
+
+const options = {
+  key: fs.readFileSync("SSL_Certs/Private Key.txt"),
+  cert: fs.readFileSync("SSL_Certs/mhowetesting_com/mhowetesting_com.crt"),
+};
 
 // use view engine. Handlebars for this one. Maybe ejs later or we could use react.
 app.engine("handlebars", exphbs());
@@ -24,7 +31,12 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/TwilioDemo", {
 });
 
 mongoose.set("debug", true);
+// non secure server
+// app.listen(PORT, () => {
+//   console.log(`Now listening on port: ${PORT}`);
+// });
 
-app.listen(PORT, () => {
-  console.log(`Now listening on port: ${PORT}`);
+//secure server.
+https.createServer(options, app).listen(PORT, () => {
+  console.log(`Live on port + ${PORT}`);
 });
