@@ -1,3 +1,4 @@
+require("dotenv").config(".env");
 const express = require("express");
 const exphbs = require("express-handlebars");
 const path = require("path");
@@ -8,9 +9,10 @@ const https = require("https");
 
 const PORT = process.env.PORT || 4570;
 
+// path to SSL files
 const options = {
-  key: fs.readFileSync("SSL_Certs/Private Key.txt"),
-  cert: fs.readFileSync("SSL_Certs/mhowetesting_com/mhowetesting_com.crt"),
+  key: fs.readFileSync("SSL/Private Key.txt"),
+  cert: fs.readFileSync("SSL/mhowetesting_com/mhowetesting_com.crt"),
 };
 
 // use view engine. Handlebars for this one. Maybe ejs later or we could use react.
