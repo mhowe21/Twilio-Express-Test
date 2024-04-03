@@ -18,8 +18,7 @@
     "express-handlebars": "^5.2.1",
     "mongoose": "^5.12.2",
     "path": "^0.12.7",
-    "twilio": "^4.21.0",
-    "ws": "^8.16.0"
+    "twilio": "^4.23.0"
   },
   "devDependencies": {
     "debugging-aid": "^0.6.8",

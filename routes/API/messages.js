@@ -6,47 +6,26 @@ require("dotenv").config("../../.env");
 const tNumber = process.env.T_NUMBER;
 const servNumber = process.env.MES_SERV;
 const statusCallbackWebhook = process.env.STATUS_CALLBACK_URL;
-const WebSocket = require("ws");
 
-//const failOverNumber = process.env.FAIL_OVER_NUMBER;
-const wss = new WebSocket.Server({ port: process.env.PORT });
 //let replies = [];
-let clients = [];
-
-wss.on("connection", (ws) => {
-  clients.push(ws);
-
-  ws.on("message", (message) => {
-    clients.forEach((client) => {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(message);
-      }
-    });
-  });
-
-  ws.on("close", () => {
-    clients = clients.filter((client) => client !== ws);
-  });
-});
 
 router.post("/sms", async (req, res) => {
   let text = req.body.body;
   //let destination = req.body.to;
 
-  function getDestination(destination) {
-    return destination ? `${destination}` : `${failOverNumber}`;
-  }
+  // function getDestination(destination) {
+  //   return destination ? `${destination}` : `${failOverNumber}`;
+  // }
 
   twilio.messages
     .create({
       body: text,
       from: servNumber,
-      to: `${getDestination(req.body.to)}`,
+      to: `${req.body.to}`,
       statusCallback: statusCallbackWebhook,
     })
     .then((message) => {
       console.log(message);
-      //console.log(message.sid);
 
       db.Sent.create({
         body: message.body,
@@ -163,12 +142,8 @@ router.get("/number/lookup", async (req, res) => {
 
 // webhooks
 router.post("/return/hook", async ({ params, body }, res, next) => {
-  //console.log(`Recieved Message:${body.Body}`);
-  //console.log(`id is ${params.id}`);
   console.log(body);
-  //replies.push({ from: body.From, Message: body.Body });
   res.status(200).end();
-  //console.log(replies);
 });
 
 router.post("/status/hook", ({ body }, res) => {

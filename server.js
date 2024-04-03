@@ -33,10 +33,11 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/TwilioDemo", {
 });
 
 mongoose.set("debug", true);
-// non secure server
-// app.listen(PORT, () => {
-//   console.log(`Now listening on port: ${PORT}`);
-// });
+
+// non secure local server
+app.listen(3080, () => {
+  console.log(`Non secure server on port: 3080`);
+});
 
 //secure server.
 https.createServer(options, app).listen(PORT, () => {

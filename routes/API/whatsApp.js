@@ -14,8 +14,6 @@ router.post("/message", (req, res) => {
       statusCallback: statusCallbackWebhook,
       to: `whatsapp:+${req.body.to}`,
       ...(req.body.url && { mediaUrl: [`${req.body.url}`] }),
-
-      //mediaUrl: [mediaPreset],
     })
     .then((data) => {
       console.log(data);
