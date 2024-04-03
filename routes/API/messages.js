@@ -7,27 +7,25 @@ const tNumber = process.env.T_NUMBER;
 const servNumber = process.env.MES_SERV;
 const statusCallbackWebhook = process.env.STATUS_CALLBACK_URL;
 
-const failOverNumber = process.env.FAIL_OVER_NUMBER;
-let replies = [];
+//let replies = [];
 
 router.post("/sms", async (req, res) => {
   let text = req.body.body;
   //let destination = req.body.to;
 
-  function getDestination(destination) {
-    return destination ? `${destination}` : `${failOverNumber}`;
-  }
+  // function getDestination(destination) {
+  //   return destination ? `${destination}` : `${failOverNumber}`;
+  // }
 
   twilio.messages
     .create({
       body: text,
       from: servNumber,
-      to: `${getDestination(req.body.to)}`,
+      to: `${req.body.to}`,
       statusCallback: statusCallbackWebhook,
     })
     .then((message) => {
       console.log(message);
-      //console.log(message.sid);
 
       db.Sent.create({
         body: message.body,
@@ -138,18 +136,14 @@ router.get("/number/lookup", async (req, res) => {
     });
 });
 
-router.get("/replies", async (req, res) => {
-  res.status(200).send(replies);
-});
+// router.get("/replies", async (req, res) => {
+//   res.status(200).send(replies);
+// });
 
 // webhooks
-router.post("/return/hook/", async ({ params, body }, res, next) => {
-  //console.log(`Recieved Message:${body.Body}`);
-  //console.log(`id is ${params.id}`);
+router.post("/return/hook", async ({ params, body }, res, next) => {
   console.log(body);
-  replies.push({ from: body.From, Message: body.Body });
   res.status(200).end();
-  console.log(replies);
 });
 
 router.post("/status/hook", ({ body }, res) => {
