@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const { text } = require("express");
 const twilio = require("../../Utils/Twilio");
 const db = require("../../models");
 require("dotenv").config("../../.env");
@@ -19,7 +18,7 @@ router.post("", async (req, res) => {
     })
     .then((message) => {
       console.log(message);
-      res.json(message);
+      res.status(200).json(message);
     })
     .catch((err) => {
       console.log(err);

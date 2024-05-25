@@ -3,6 +3,7 @@ const mmsMedia = document.querySelector(".MMS-media");
 const MMSOption = document.querySelector("#MMS-Radio");
 const SMSOption = document.querySelector("#SMS-Radio");
 const whatsAppOption = document.querySelector("#WhatsApp-Radio");
+const FacebookMSGRBox = document.querySelector("#FBM-Radio");
 const responseBox = document.querySelector("#response-box");
 
 //actions
@@ -29,6 +30,7 @@ sendButton.addEventListener("click", (e) => {
     sendWhatsApp(toNumber, message, mediaURL);
     e.preventDefault();
   } else if (radio == "FacebookMSGR") {
+    sendFBMessenger(toNumber, message, mediaURL);
     let mediaURL = document.querySelector("#input-media-URL").value;
     e.preventDefault();
   }
@@ -44,6 +46,9 @@ SMSOption.addEventListener("click", (e) => {
 });
 
 whatsAppOption.addEventListener("click", (e) => {
+  mmsMedia.classList.remove("hidden");
+});
+FacebookMSGRBox.addEventListener("click", (e) => {
   mmsMedia.classList.remove("hidden");
 });
 
@@ -122,6 +127,32 @@ function sendWhatsApp(number, message, mediaURL = "") {
   };
 
   fetch("/api/v1/whatsapp/message", requestOptions)
+    .then((response) => response.json())
+    .then((responseJSON) => {
+      console.log(responseJSON);
+      responseBox.value = JSON.stringify(responseJSON);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+function sendFBMessenger(number, message, mediaURL = "") {
+  let headers = new Headers();
+  headers.append("Content-Type", "application/json");
+
+  let rawBody = JSON.stringify({
+    body: message,
+    to: number,
+    url: mediaURL,
+  });
+
+  let requestOptions = {
+    method: "POST",
+    headers: headers,
+    body: rawBody,
+  };
+
+  fetch("/api/v1/facebookMSG", requestOptions)
     .then((response) => response.json())
     .then((responseJSON) => {
       console.log(responseJSON);
