@@ -9,7 +9,7 @@ const statusCallbackWebhook = process.env.STATUS_CALLBACK_URL;
 router.post("/message", (req, res) => {
   twilio.messages
     .create({
-      from: `whatsapp:${wNumber}`,
+      from: `${wNumber}`,
       body: req.body.body,
       statusCallback: statusCallbackWebhook,
       to: `whatsapp:+${req.body.to}`,

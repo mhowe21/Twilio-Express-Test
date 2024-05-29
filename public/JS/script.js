@@ -29,9 +29,9 @@ sendButton.addEventListener("click", (e) => {
     let mediaURL = document.querySelector("#input-media-URL").value;
     sendWhatsApp(toNumber, message, mediaURL);
     e.preventDefault();
-  } else if (radio == "FacebookMSGR") {
-    sendFBMessenger(toNumber, message, mediaURL);
+  } else if (radio == "FBM") {
     let mediaURL = document.querySelector("#input-media-URL").value;
+    sendFBMessenger(toNumber, message, mediaURL);
     e.preventDefault();
   }
   alert("Request sent");
