@@ -8,14 +8,7 @@ const fs = require("fs");
 const https = require("https");
 
 const PORT = process.env.PORT || 4570;
-
-// path to SSL files
-const options = {
-  key: fs.readFileSync("SSL/Private Key.txt"),
-  cert: fs.readFileSync("SSL/mhowetesting_com/mhowetesting_com.crt"),
-};
-
-// use view engine. Handlebars for this one. Maybe ejs later or we could use react.
+//  use handlebars
 app.engine("handlebars", exphbs());
 app.set("view engine", "handlebars");
 
@@ -26,20 +19,35 @@ app.use(require("./routes"));
 app.use(express.static("./public"));
 
 //set mongoose
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/TwilioDemo", {
-  useFindAndModify: false,
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
 
-mongoose.set("debug", true);
+mongoose
+  .connect(process.env.MONGODB_URI || "mongodb://localhost/TwilioDemo", {
+    useFindAndModify: false,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then((response) => {
+    mongoose.set("debug", true);
+    console.log(response);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
-// non secure local server
-app.listen(3080, () => {
-  console.log(`Non secure server on port: 3080`);
-});
-
-//secure server.
-https.createServer(options, app).listen(PORT, () => {
-  console.log(`Live on port + ${PORT}`);
-});
+// attempt to load SSL files and launch https server if found
+try {
+  const options = {
+    key: fs.readFileSync("SSL/Private Key.txt"),
+    cert: fs.readFileSync("SSL/mhowetesting_com/mhowetesting_com.crt"),
+  };
+  //secure server.
+  https.createServer(options, app).listen(PORT, () => {
+    console.log(`Live on port + ${PORT}`);
+  });
+} catch (err) {
+  console.log(err);
+  // non secure local server
+  app.listen(3080, () => {
+    console.log(`Non secure server on port: 3080`);
+  });
+}
