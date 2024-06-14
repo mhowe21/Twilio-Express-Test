@@ -50,15 +50,15 @@ try {
   const wss = new WebSocketServer({ server });
 
   wss.on("connection", function connection(ws) {
-    module.exports = ws;
     ws.on("error", console.error);
+    module.exports = ws;
 
     ws.on("message", function message(data) {
       console.log("received: %s", data);
       ws.send("cows");
     });
 
-    ws.send("something");
+    ws.send("socket created");
   });
 } catch (err) {
   console.log(err);
