@@ -6,6 +6,7 @@ require("dotenv").config("../../.env");
 const tNumber = process.env.T_NUMBER;
 const servNumber = process.env.MES_SERV;
 const statusCallbackWebhook = process.env.STATUS_CALLBACK_URL;
+const { Client } = require("twilio/lib/base/BaseTwilio");
 
 //let replies = [];
 
@@ -144,6 +145,12 @@ router.get("/number/lookup", async (req, res) => {
 router.post("/return/hook", async ({ params, body }, res, next) => {
   console.log(body);
   res.status(200).end();
+  try {
+    const ws = require("../../server");
+    ws.send(JSON.stringify(body));
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 router.post("/status/hook", ({ body }, res) => {

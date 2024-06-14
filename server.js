@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const app = express();
 const fs = require("fs");
 const https = require("https");
+const { builtinModules } = require("module");
 const { WebSocketServer } = require("ws");
 
 const PORT = process.env.PORT || 4570;
@@ -45,13 +46,16 @@ try {
   const server = https.createServer(options, app).listen(PORT, () => {
     console.log(`Live on port + ${PORT}`);
   });
-  // ws server
+  //ws server
   const wss = new WebSocketServer({ server });
+
   wss.on("connection", function connection(ws) {
+    module.exports = ws;
     ws.on("error", console.error);
 
     ws.on("message", function message(data) {
       console.log("received: %s", data);
+      ws.send("cows");
     });
 
     ws.send("something");
