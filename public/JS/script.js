@@ -7,10 +7,14 @@ const FacebookMSGRBox = document.querySelector("#FBM-Radio");
 const responseBox = document.querySelector("#response-box");
 
 // create web socket
-const exampleSocket = new WebSocket(
-  "wss://mhowetesting.com:4570/socketserver",
-  "protocolOne"
-);
+try {
+  const exampleSocket = new WebSocket(
+    "wss://mhowetesting.com:4570/socketserver",
+    "protocolOne"
+  );
+} catch (err) {
+  console.log(err);
+}
 
 //actions
 sendButton.addEventListener("click", (e) => {
