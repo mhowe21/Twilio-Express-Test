@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const app = express();
 const fs = require("fs");
 const https = require("https");
+const { WebSocketServer } = require("ws");
 
 const PORT = process.env.PORT || 4570;
 //  use handlebars
@@ -41,8 +42,19 @@ try {
     cert: fs.readFileSync("SSL/mhowetesting_com/mhowetesting_com.crt"),
   };
   //secure server.
-  https.createServer(options, app).listen(PORT, () => {
+  const server = https.createServer(options, app).listen(PORT, () => {
     console.log(`Live on port + ${PORT}`);
+  });
+  // ws server
+  const wss = new WebSocketServer({ server });
+  wss.on("connection", function connection(ws) {
+    ws.on("error", console.error);
+
+    ws.on("message", function message(data) {
+      console.log("received: %s", data);
+    });
+
+    ws.send("something");
   });
 } catch (err) {
   console.log(err);
