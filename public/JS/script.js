@@ -6,15 +6,15 @@ const whatsAppOption = document.querySelector("#WhatsApp-Radio");
 const FacebookMSGRBox = document.querySelector("#FBM-Radio");
 const responseBox = document.querySelector("#response-box");
 const wSocketPort = "5001";
+const hostName = window.location.hostname;
+const wSocket = createWebsocket(hostName, wSocketPort);
 
-// create web socket
+//socket actions
+wSocket.onmessage = (event) => {
+  console.log(event.data);
+};
 
-const wSocket = new WebSocket(
-  `wss://${window.location.hostname}:${wSocketPort}/socketserver`,
-  "protocolOne"
-);
-
-//actions
+//UI actions
 sendButton.addEventListener("click", (e) => {
   let toNumber = document.getElementById("input-number").value.trim();
   let message = document.getElementById("input-text").value;
@@ -169,6 +169,15 @@ function sendFBMessenger(number, message, mediaURL = "") {
     .catch((err) => {
       console.log(err);
     });
+}
+
+function createWebsocket(host, port) {
+  // create web socket
+  let wSocket = new WebSocket(
+    `wss://${host}:${port}/socketserver`,
+    "protocolOne"
+  );
+  return wSocket;
 }
 
 // setInterval(() => {

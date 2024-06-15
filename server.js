@@ -55,7 +55,7 @@ try {
 
     ws.on("message", function message(data) {
       console.log("received: %s", data);
-      ws.send("cows");
+      ws.send("recieved socket data");
     });
 
     ws.send("socket created");
