@@ -5,16 +5,14 @@ const SMSOption = document.querySelector("#SMS-Radio");
 const whatsAppOption = document.querySelector("#WhatsApp-Radio");
 const FacebookMSGRBox = document.querySelector("#FBM-Radio");
 const responseBox = document.querySelector("#response-box");
+const wSocketPort = "5001";
 
 // create web socket
-try {
-  const exampleSocket = new WebSocket(
-    "wss://mhowetesting.com:4570/socketserver",
-    "protocolOne"
-  );
-} catch (err) {
-  console.log(err);
-}
+
+const wSocket = new WebSocket(
+  `wss://${window.location.hostname}:${wSocketPort}/socketserver`,
+  "protocolOne"
+);
 
 //actions
 sendButton.addEventListener("click", (e) => {
