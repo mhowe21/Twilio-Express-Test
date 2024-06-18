@@ -5,13 +5,15 @@ const SMSOption = document.querySelector("#SMS-Radio");
 const whatsAppOption = document.querySelector("#WhatsApp-Radio");
 const FacebookMSGRBox = document.querySelector("#FBM-Radio");
 const responseBox = document.querySelector("#response-box");
-const wSocketPort = "5001";
+const webhookBox = document.querySelector("#inbound-box");
+const wSocketPort = "4570";
 const hostName = window.location.hostname;
 const wSocket = createWebsocket(hostName, wSocketPort);
 
 //socket actions
 wSocket.onmessage = (event) => {
   console.log(event.data);
+  webhookBox.value = event.data;
 };
 
 //UI actions
@@ -179,16 +181,3 @@ function createWebsocket(host, port) {
   );
   return wSocket;
 }
-
-// setInterval(() => {
-//   var requestOptions = {
-//     method: "GET",
-//   };
-
-//   fetch("http://mhowetesting.com:4570/api/v1/messages/replies", requestOptions)
-//     .then((response) => response.json())
-//     .then((result) => {
-//       responseBox.value = JSON.stringify(result);
-//     })
-//     .catch((error) => console.log("error", error));
-// }, 1000);
