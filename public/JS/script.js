@@ -113,7 +113,7 @@ function sendMMS(number, message, mediaURL) {
     .then((response) => response.json())
     .then((responseJSON) => {
       console.log(responseJSON);
-      responseBox.value(JSON.stringify(responseJSON));
+      responseBox.value = JSON.stringify(responseJSON);
     })
     .catch((err) => {
       console.log(err);
